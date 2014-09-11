@@ -1,4 +1,13 @@
+<%
+var user = require('store').server.current(session);
 
+print(user);
+
+if (!user) {
+    response.sendRedirect('./login');
+}
+else {
+    %>
     <!DOCTYPE html>
 <meta charset="utf-8">
 
@@ -109,61 +118,6 @@ else{
 
     //display dummy data
     obj=require('graphdata/graph.json');
-}
-
-
-function generateData(resource, obj) {
-
-    var associations = registry.associations(resource.id);
-    var artifact = Packages.org.wso2.carbon.governance.api.util.GovernanceUtils.retrieveGovernanceArtifactByPath(
-            registry.registry,resource.id);
-
-    var artifactName= artifact.getAttributes("overview_name");
-
-    obj.name = artifactName == null ? resource.name : artifactName[0];
-    obj.image = getImageByMediaType(resource.mediaType);
-    obj.color = '#A3EA69';
-    obj.mediaType = resource.mediaType;
-    obj.lcState = artifact.lifecycleState;
-    obj.children = new Array();
-
-    for each(var assoc in associations)
-    {
-
-        if (assoc.type == "depends") {
-            for (var attr in assoc) {
-                //print(attr + " : " + assoc[attr]);
-                if (attr == 'src' && assoc[attr] == resource.id) {
-
-                    var resourceDest = assoc['dest'];
-                    var targertResource = registry.get(resourceDest);
-                    var targetObject = new Object();
-                    // print('<br><br>')
-                    // print (associations);
-                    generateData(targertResource, targetObject);
-                    //print('<br>'+targetObject+'<br>')  ;
-                    obj.children.push(targetObject);
-                }
-            }
-        }
-    }
-}
-
-//print(obj);
-
-function getImageByMediaType(mediatType) {
-    if (mediatType == "application/wsdl+xml") {
-        return "wsdl.png"
-    }
-    else if (mediatType == "application/vnd.wso2-service+xml") {
-        return "service.png"
-    }
-    else if (mediatType == "application/vnd.wso2.endpoint") {
-        return "endpoint.png"
-    }
-    else{
-        return "service.png"
-    }
 }
 
 %>
@@ -518,4 +472,60 @@ function color(d) {
 
 </script>
 </body>
+<%
+}
 
+function generateData(resource, obj) {
+
+    var associations = registry.associations(resource.id);
+    var artifact = Packages.org.wso2.carbon.governance.api.util.GovernanceUtils.retrieveGovernanceArtifactByPath(
+            registry.registry,resource.id);
+
+    var artifactName= artifact.getAttributes("overview_name");
+
+    obj.name = artifactName == null ? resource.name : artifactName[0];
+    obj.image = getImageByMediaType(resource.mediaType);
+    obj.color = '#A3EA69';
+    obj.mediaType = resource.mediaType;
+    obj.lcState = artifact.lifecycleState;
+    obj.children = new Array();
+
+    for each(var assoc in associations)
+    {
+
+        if (assoc.type == "depends") {
+            for (var attr in assoc) {
+                //print(attr + " : " + assoc[attr]);
+                if (attr == 'src' && assoc[attr] == resource.id) {
+
+                    var resourceDest = assoc['dest'];
+                    var targertResource = registry.get(resourceDest);
+                    var targetObject = new Object();
+                    // print('<br><br>')
+                    // print (associations);
+                    generateData(targertResource, targetObject);
+                    //print('<br>'+targetObject+'<br>')  ;
+                    obj.children.push(targetObject);
+                }
+            }
+        }
+    }
+}
+
+//print(obj);
+
+function getImageByMediaType(mediatType) {
+    if (mediatType == "application/wsdl+xml") {
+        return "wsdl.png"
+    }
+    else if (mediatType == "application/vnd.wso2-service+xml") {
+        return "service.png"
+    }
+    else if (mediatType == "application/vnd.wso2.endpoint") {
+        return "endpoint.png"
+    }
+    else{
+        return "service.png"
+    }
+}
+%>
