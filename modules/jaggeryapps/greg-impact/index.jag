@@ -50,6 +50,17 @@ Summary
         </div>
     </td>
 </tr>
+    <tr>
+        <td>
+          <div class="awesome medium value">
+          Path
+          </div>
+        </td>
+        <td>
+            <div id="path" class="awesome medium text">
+            </div>
+        </td>
+    </tr>
 <tr>
     <td>
       <div class="awesome medium value">
@@ -235,9 +246,7 @@ $(function() {
         root = json;
         update(root) ;
 
-        $('#name').text(root.name);
-        $ ('#mediaType').text(root.mediaType);
-        $ ('#lcState').text((root.lcState == null ? 'undefined' : root.lcState));
+        displayInfo(root);
 
 
 
@@ -368,13 +377,13 @@ $(function() {
         .attr("d", "M0,-5L10,0L0,5");
 
          path = svg.append("svg:g").selectAll("line")
-        .data(force.links())
-        .enter()
        .attr("class", function (d) {
-        return "link";
-    })
+            return "link";
+        })
         .attr("marker-end", function (d) {
-        return "url(#arrow)"});
+        return "url(#arrow)"})
+        .data(force.links())
+        .enter();
 
   //end of code to render arrows
 
@@ -444,6 +453,8 @@ function color(d) {
 
       $('#name').text(resource.name) ;
       $('#mediaType').text(resource.mediaType) ;
+      var linkString = '<a href = "../carbon/resources/resource.jsp?region=region3&item=resource_browser_menu&path=' + encodeURIComponent(resource.path) + '">' + resource.path + '</a>';
+      $('#path').html(linkString) ;
       if(resource.lcState==null){
               $('#lcState').text("Not defined") ;
       } else{
@@ -488,6 +499,7 @@ function generateData(resource, obj) {
     obj.color = '#A3EA69';
     obj.mediaType = resource.mediaType;
     obj.lcState = artifact.lifecycleState;
+    obj.path = artifact.path;
     obj.children = new Array();
 
     for each(var assoc in associations)
