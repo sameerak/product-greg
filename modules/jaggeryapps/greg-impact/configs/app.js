@@ -16,10 +16,22 @@
  * under the License.
  */
 
-var configs = require('../config.json');
+var carbon=require('carbon');
+var server=new carbon.server.Server({
+    url : "https://localhost:9443/"
+});
 
+var sysRegistry=new carbon.registry.Registry(server, {
+    system: true,
+    tenantId: -1234
+});
 
-var store = require('store');
-store.server.init(configs);
+var configurations =
+    Packages.org.wso2.carbon.governance.api.util.GovernanceUtils.findGovernanceArtifactConfigurations(sysRegistry.registry);
+var config = new Object();
+config["application/vnd.wso2.endpoint"] = "endpoint.png";
 
-store.user.init(configs);
+for (var i = 0; i < configurations.size(); i++) {
+    config[configurations.get(i).getMediaType()] = "list" + configurations.get(i).getIconSet() + ".png";
+}
+application.put("mediaTypesToImages", config);
