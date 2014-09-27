@@ -19,18 +19,18 @@
 
 function generateGraphData(registry, resourcePath, associationType){
     var util = require('modules/utility.js');
-    var artifact = Packages.org.wso2.carbon.governance.api.util.GovernanceUtils.retrieveGovernanceArtifactByPath(
+    var governanceUtils = Packages.org.wso2.carbon.governance.api.util.GovernanceUtils;
+    var artifact = governanceUtils.retrieveGovernanceArtifactByPath(
         registry.registry,resourcePath);
     if (artifact){
         var graphDataObject = new Object();
 
         var artifactName= artifact.getAttributes("overview_name");
-
-        graphDataObject.name = artifactName == null ?
-            /*
-            If the artifact's overview_name is not exist, resource name is extracted
-            from the resourcePath provided.
-             */
+        /*
+         If the artifact's overview_name is not exist, resource name is extracted
+         from the resourcePath provided.
+         */
+        graphDataObject.name = (artifactName == null) ?
             resourcePath.substring(resourcePath.lastIndexOf("/") + 1) :
             artifactName[0];
 
@@ -47,7 +47,7 @@ function generateGraphData(registry, resourcePath, associationType){
         }
 
         graphDataObject.image = util.getImageByMediaType(mediaType);
-        graphDataObject.color = '#A3EA69';
+        graphDataObject.color = '#A3EA69'; //TODO implement util.getColorByMediaType(mediaType);
         graphDataObject.mediaType = mediaType;
         graphDataObject.lcState = artifact.lifecycleState;
         graphDataObject.path = artifact.path;

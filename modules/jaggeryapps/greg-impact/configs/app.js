@@ -16,6 +16,15 @@
  * under the License.
  */
 
+//Configs needed for controllers
+var configs = require('../config.json');
+
+var store = require('store');
+store.server.init(configs);
+
+store.user.init(configs);
+
+//configs needed for impact analysis
 var carbon=require('carbon');
 var server=new carbon.server.Server({
     url : "https://localhost:9443/"

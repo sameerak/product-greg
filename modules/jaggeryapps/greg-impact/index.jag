@@ -130,14 +130,17 @@ else {
 
         if(util.isNotNullOrEmpty(inputParameters.path)){
             var dataPopulator = require("modules/dataPopulator.js");
-            obj = dataPopulator.generateGraphData(registry, inputParameters.path,
-                    /*
-                     If associationType query parameter is set use that value to
-                     generate the impact graph, else use the defalult value "depends"
-                     */
-                   util.isNotNullOrEmpty(inputParameters.associationType) ?
-                           inputParameters.associationType :
-                           "depends");
+            var associationType = "depends";
+
+            /*
+             If associationType query parameter is set, use that value to
+             generate the impact graph, else use the defalult value "depends"
+             */
+            if (util.isNotNullOrEmpty(inputParameters.associationType)){
+                 associationType = inputParameters.associationType;
+            }
+
+            obj = dataPopulator.generateGraphData(registry, inputParameters.path, associationType);
         }
         else{
             obj = require('graphdata/graph.json');
