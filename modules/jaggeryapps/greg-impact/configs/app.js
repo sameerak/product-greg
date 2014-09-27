@@ -35,8 +35,8 @@ var sysRegistry=new carbon.registry.Registry(server, {
     tenantId: -1234
 });
 
-var configurations =
-    Packages.org.wso2.carbon.governance.api.util.GovernanceUtils.findGovernanceArtifactConfigurations(sysRegistry.registry);
+var governanceUtils = Packages.org.wso2.carbon.governance.api.util.GovernanceUtils;
+var configurations = governanceUtils.findGovernanceArtifactConfigurations(sysRegistry.registry);
 var config = new Object();
 config["application/vnd.wso2.endpoint"] = "endpoint.png";
 

@@ -245,7 +245,12 @@ input {
 .awesome:active							{ top: 1px; }
 .small.awesome, .small.awesome:visited 			{ font-size: 11px; }
 .awesome, .awesome:visited,
-.medium.awesome, .medium.awesome:visited 		{ font-size: 13px; font-weight: bold; line-height: 1; text-shadow: 0 -1px 1px rgba(0,0,0,0.25); }
+.medium.awesome, .medium.awesome:visited 		{
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 1;
+    text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+}
 .large.awesome, .large.awesome:visited 			{ font-size: 14px; padding: 15px 20px 16px; }
 
 .green.awesome, .green.awesome:visited		{ background-color: #91bd09; }
