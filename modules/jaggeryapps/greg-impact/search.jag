@@ -1,0 +1,87 @@
+<%
+/*
+ * Copyright (c) 2005-2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+var user = require('store').server.current(session);
+var log = new Log();
+
+if (!user) {
+    /*
+     query parameters of the original request should be passed to the
+     login jag in order to redirect to the correct place
+     */
+    response.sendRedirect('./login?' + request.getQueryString());
+}
+else {
+
+    var verb = request.getMethod();
+    if(verb == "GET") {
+        var util = require('modules/utility.js');
+        var inputParameters = request.getAllParameters("UTF-8");
+        response.contentType = 'text/javascript;charset=ISO-8859-1';
+
+        if(util.isNotNullOrEmpty(inputParameters.path)) {
+            var carbon = require('carbon');
+            var registry = new carbon.registry.Registry(user.um.server.url,user);
+
+            var MetadataSearchService =
+                    carbon.server.osgiService('org.wso2.carbon.registry.search.services.MetadataSearchService');
+
+            var HashMap = java.util.HashMap;
+            var map = HashMap();
+
+            log.info("input params = " + stringify(inputParameters));
+
+            map.put("resourcePath", "%" + inputParameters.path + "%");
+            map.put("mediaType", inputParameters.mediaType);
+
+            var resultObjs = MetadataSearchService.search(registry.registry, map);
+            var governanceUtils = Packages.org.wso2.carbon.governance.api.util.GovernanceUtils;
+            var result = [];
+
+            for (var i = 0; i < resultObjs.length; i++) {
+                log.info("path = " + resultObjs[i].getResourcePath());
+                var artifact = governanceUtils.retrieveGovernanceArtifactByPath(registry.registry,
+                                                                                resultObjs[i].getResourcePath());
+                log.info("id = " + artifact.id);
+
+                var resultObj = {};
+                resultObj.id = artifact.id;
+                resultObj.path = artifact.path;
+
+                result[i] = resultObj;
+            }
+
+            print(inputParameters.callback + "(");
+            print(result);
+            print(")");
+        }
+        else {
+            response.status = 400;
+            print("Please specify a path to be searched");
+        }
+    }
+    else {
+        response.status = 400;
+        print("Only method allowed on this resource is HTTP GET");
+    }
+%>
+
+<%
+}
+%>

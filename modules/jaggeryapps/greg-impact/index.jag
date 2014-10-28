@@ -39,6 +39,14 @@ else {
 
         <div style="width:1200px">
 
+            <div  style="float:left;" class="ui-widget">
+                <form>
+                    <ul>
+                        <li><select id="searchBox"></select></li>
+                    </ul>
+                </form>
+            </div>
+
             <div id="infotable" style="width:200px; float:right;">
                 <div class="awesome large value" style="width:100px;text-align: center;">
                 Summary
