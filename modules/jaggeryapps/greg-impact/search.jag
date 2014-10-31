@@ -35,7 +35,7 @@ else {
         var inputParameters = request.getAllParameters("UTF-8");
         response.contentType = 'text/javascript;charset=ISO-8859-1';
 
-        if(util.isNotNullOrEmpty(inputParameters.path)) {
+        if(util.inputNotNullOrEmpty(inputParameters,["path", "mediaType", "callback"])) {
             var carbon = require('carbon');
             var registry = new carbon.registry.Registry(user.um.server.url,user);
 
@@ -45,24 +45,16 @@ else {
             var HashMap = java.util.HashMap;
             var map = HashMap();
 
-            log.info("input params = " + stringify(inputParameters));
-
             map.put("resourcePath", "%" + inputParameters.path + "%");
             map.put("mediaType", inputParameters.mediaType);
 
             var resultObjs = MetadataSearchService.search(registry.registry, map);
-            var governanceUtils = Packages.org.wso2.carbon.governance.api.util.GovernanceUtils;
             var result = [];
 
             for (var i = 0; i < resultObjs.length; i++) {
-                log.info("path = " + resultObjs[i].getResourcePath());
-                var artifact = governanceUtils.retrieveGovernanceArtifactByPath(registry.registry,
-                                                                                resultObjs[i].getResourcePath());
-                log.info("id = " + artifact.id);
-
                 var resultObj = {};
-                resultObj.id = artifact.id;
-                resultObj.path = artifact.path;
+                resultObj.id = resultObjs[i].getResourcePath();
+                resultObj.path = resultObjs[i].getResourcePath();
 
                 result[i] = resultObj;
             }
@@ -73,7 +65,7 @@ else {
         }
         else {
             response.status = 400;
-            print("Please specify a path to be searched");
+            print("Please specify a path and a media type to be searched");
         }
     }
     else {
