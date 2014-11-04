@@ -29,7 +29,7 @@ import org.wso2.greg.integration.common.ui.page.main.HomePage;
 import org.wso2.greg.integration.common.utils.GREGIntegrationUIBaseTest;
 import org.wso2.carbon.automation.engine.context.beans.User;
 
-public class ESBLoginTestCase extends GREGIntegrationUIBaseTest {
+public class GREGLoginTestCase extends GREGIntegrationUIBaseTest {
     private WebDriver driver;
     private User userInfo;
 
