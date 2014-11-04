@@ -4,14 +4,15 @@ package org.wso2.carbon.greg.ui.test.notification;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.wso2.carbon.automation.engine.context.TestUserMode;
 import org.wso2.carbon.automation.extensions.selenium.BrowserManager;
 import org.wso2.greg.integration.common.ui.page.LoginPage;
-import org.wso2.greg.integration.common.ui.page.main.HomePage;
 import org.wso2.greg.integration.common.ui.page.notififcations.ManageNotificationPage;
 import org.wso2.greg.integration.common.ui.page.notififcations.NotificationHome;
 import org.wso2.greg.integration.common.ui.page.resource.ResourceHome;
@@ -22,12 +23,14 @@ public class TestRegistry2332 extends GREGIntegrationUIBaseTest {
 
     private WebDriver driver;
     private User userInfo;
+    private WebDriverWait driverWait;
 
     @BeforeClass(alwaysRun = true)
     public void setUp() throws Exception {
         super.init(TestUserMode.SUPER_TENANT_ADMIN);
         userInfo = automationContext.getContextTenant().getContextUser();
         driver = BrowserManager.getWebDriver();
+        driverWait = new WebDriverWait(driver, 5);
         driver.get(getLoginURL());
     }
 
@@ -57,6 +60,8 @@ public class TestRegistry2332 extends GREGIntegrationUIBaseTest {
     @Test(groups = "wso2.greg", description = "adding a subscription to root element",
             dependsOnMethods = { "testAddSubscription" })
     public void testGenerateNotification() throws Exception {
+        driverWait.until(ExpectedConditions.visibilityOfElementLocated(By
+                .xpath("//ul[@class=\"main\"]/li[contains(text(), \"Resources\")]")));
         ResourceHome resourceHome = new ResourceHome(driver);
 
         driver.findElement(By.id("propertiesIconMinimized")).click();
@@ -72,6 +77,7 @@ public class TestRegistry2332 extends GREGIntegrationUIBaseTest {
     @Test(groups = "wso2.greg", description = "adding a subscription to root element",
             dependsOnMethods = { "testGenerateNotification" })
     public void testHideNotification() throws Exception {
+        //refresh page to load management console notifications
         driver.findElement(By.xpath("//a[@class=\"registry-breadcrumb\"]")).click();
 
         driver.findElement(By.id("viewNotification")).click();
@@ -82,20 +88,26 @@ public class TestRegistry2332 extends GREGIntegrationUIBaseTest {
     @AfterClass(alwaysRun = true)
     public void tearDown() throws Exception {
         driver.findElement(By.xpath("//div[@id=\"menu-panel-button1\"]/span")).click();
+        driverWait.until(ExpectedConditions.visibilityOfElementLocated(By
+                .xpath("//ul[@class=\"main\"]/li[contains(text(), \"Resources\")]")));
 
         NotificationHome notificationHome = new NotificationHome(driver);
         ManageNotificationPage manageNotificationPage = new ManageNotificationPage(driver);
 
-        driver.findElement(By.xpath("//td/a[contains(text(), \"Delete\"]")).click();
+        //Delete added subscription
+        driver.findElement(By.xpath("//td/a[contains(text(), \"Delete\")]")).click();
         driver.findElement(By.xpath("//div[@class=\"ui-dialog-buttonpane\"]/button[contains(text(), \"Yes\")]"))
                 .click();
 
         driver.findElement(By.xpath("//div[@id=\"menu-panel-button1\"]/span")).click();
+        driverWait.until(ExpectedConditions.visibilityOfElementLocated(By
+                .xpath("//ul[@class=\"main\"]/li[contains(text(), \"Resources\")]")));
 
         ResourceHome resourceHome = new ResourceHome(driver);
 
+        //Delete added property
         driver.findElement(By.id("propertiesIconMinimized")).click();
-        driver.findElement(By.xpath("//div[@id=\"propViewPanel_0\"]/td/a[contains(text(), \"Delete\")]")).click();
+        driver.findElement(By.xpath("//tr[@id=\"propViewPanel_0\"]/td/a[contains(text(), \"Delete\")]")).click();
         driver.findElement(By.xpath("//div[@class=\"ui-dialog-buttonpane\"]/button[contains(text(), \"Yes\")]"))
                 .click();
 
