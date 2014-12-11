@@ -1,0 +1,199 @@
+<%
+/*
+ * Copyright (c) 2005-2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+var user = require('store').server.current(session);
+var log = new Log();
+
+if (!user) {
+    /*
+     query parameters of the original request should be passed to the
+     login jag in order to redirect to the correct place
+     */
+    response.sendRedirect('./login?' + request.getQueryString());
+}
+else {
+    %>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Impact Analysis</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
+    </head>
+    <body>
+
+        <div style="width:1200px">
+
+            <div  style="float:left;" class="ui-widget">
+                <form>
+                    <ul>
+                        <li><select id="searchBox"></select></li>
+                    </ul>
+                </form>
+            </div>
+
+            <div id="infotable" style="width:200px; float:right;">
+                <div class="awesome large value" style="width:100px;text-align: center;">
+                Summary
+                </div>
+                <br/>
+                <br/>
+                <table>
+                    <tr>
+                        <td>
+                            <div class="awesome medium value">
+                                Name
+                            </div>
+                        </td>
+                        <td>
+                            <div id="name" class="awesome medium text">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="awesome medium value">
+                                Media Type
+                            </div>
+                        </td>
+                            <td>
+                                <div id="mediaType" class="awesome medium text">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="awesome medium value">
+                                Path
+                            </div>
+                        </td>
+                        <td>
+                            <div id="path" class="awesome medium text">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="awesome medium value">
+                                Lifecycle State
+                            </div>
+                        </td>
+                        <td>
+                            <div id="lcState" class="awesome medium text">
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <br/>
+                <div class="awesome large value" style="width:100px;text-align: center;">
+                Legend
+                </div>
+                <br/>
+                <br/>
+                <table id="legend">
+                    <tr>
+                        <th>
+                            <div class="awesome medium value">
+                                Media Type
+                            </div>
+                        </th>
+                        <th>
+                            <div class="awesome medium text">
+                                Icon
+                            </div>
+                        </th>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="graphFrame" style="width:950px;float:left;height:600px;border: 3px solid black;">
+                <div id="graph" style="width:900px;float:left;height:600px;">  </div>
+                <div style="clear: both"></div>
+            </div>
+        </div>
+
+
+    <%
+    var util = require('../modules/utility.js');
+    var carbon = require('carbon');
+    var registry = new carbon.registry.Registry(user.um.server.url,user);
+
+    var inputParameters = request.getAllParameters("UTF-8");
+    var obj;
+
+    if(util.isNotNullOrEmpty(inputParameters.path)){
+        var dataPopulator = require("../modules/dataPopulator.js");
+        var associationType = "depends";
+
+        /*
+         If associationType query parameter is set, use that value to
+         generate the impact graph, else use the defalult value "depends"
+         */
+        if (util.isNotNullOrEmpty(inputParameters.associationType)){
+            associationType = inputParameters.associationType;
+        }
+
+        obj = dataPopulator.generateGraphData(registry, inputParameters.path, associationType);
+    }
+    else{
+        obj = require('../graphdata/graph.json');
+    }
+    %>
+        <link href="../extensions/app/greg_impact/css/style.css" rel="stylesheet" />
+        <link href="../extensions/app/greg_impact/public/css/jquery-ui-1.10.4.min.css" rel="stylesheet" />
+        <script src="../extensions/app/greg_impact/public/js/d3.v3.min.js"></script>
+        <script src="../extensions/app/greg_impact/public/js/jquery.min.js"></script>
+        <script src="../extensions/app/greg_impact/public/js/jquery.noisy.min.js"></script>
+        <script src="../extensions/app/greg_impact/public/js/jquery-ui-1.10.4.custom.min.js"></script>
+        <script src="../extensions/app/greg_impact/js/impactAnalysis.js"></script>
+        <script>
+
+            var imageScale = 0.9,
+                width =950,
+                height = 600,
+                root = <%=obj%>,
+                legend = <%=application.get("mediaTypesToImages")%>;
+
+
+            var force = d3.layout.force()
+                .linkDistance(120)
+                .charge(-400)
+                .gravity(.01)
+                .size([width, height])
+                .on("tick", tick);
+
+            var svg = d3.select("#graph").append("svg")
+                .attr("width", width)
+                .attr("height", height)
+                .attr("pointer-events", "all")
+                .call(d3.behavior.zoom().on("zoom", redraw)).on("dblclick.zoom", null)
+                .append('g');
+
+            var link = svg.selectAll(".link"),
+                node = svg.selectAll(".node");
+
+                update(root) ;
+                drawArrows();
+                displayInfo(root);
+
+        </script>
+    </body>
+</html>
+<%
+}
+%>
