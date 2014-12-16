@@ -148,11 +148,13 @@ else {
 
         graph.nodes = [];
         graph.edges = [];
+        graph.relations = [];
         graph.index = 0;
+        graph.relationIndex = 0;
 
 
             dataPopulator.getNodesAndEdges(registry, inputParameters.path, graph);
-        log.info(graph);
+        //log.info(graph);
         obj = graph;
 
         }
@@ -194,6 +196,8 @@ else {
 
             var link = svg.selectAll(".link"),
                 node = svg.selectAll(".node"),
+                linkNode = svg.selectAll(".linkNode"),
+                linkg = svg.selectAll(".linkg"),
                 searchArray = [],
                 searchedNode,
                 selectedNode = -1,

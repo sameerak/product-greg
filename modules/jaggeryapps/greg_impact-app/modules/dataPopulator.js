@@ -101,7 +101,7 @@ function getNodesAndEdges(registry,resourcePath, graph){
                 artifactName[0];
 
             var mediaType;
-            log.info(artifact.mediaType);
+            //log.info(artifact.mediaType);
             if (util.isNotNullOrEmpty(artifact.mediaType)){
                 mediaType = artifact.mediaType;
             } else {
@@ -120,12 +120,13 @@ function getNodesAndEdges(registry,resourcePath, graph){
             graphDataObject.mediaType = mediaType;
             //graphDataObject.lcState = artifact.lifecycleState;
             graphDataObject.path = artifact.path;
+            graphDataObject.relations = [];
             graphDataObject.id = graph.index;
             graph.index++;
 
             graph.nodes[artifact.path] = graphDataObject;
             graph.nodes.push(graphDataObject);
-            log.info(graph.nodes);
+            //log.info(graph.nodes);
 
 
             var associations = registry.associations(resourcePath);
@@ -135,16 +136,47 @@ function getNodesAndEdges(registry,resourcePath, graph){
                         var resourceDest = associations[i].dest; // {"source":1,"target":0,"value":1},
 
                         if(getNodesAndEdges(registry, resourceDest, graph)){
-                            var edge = new Object();
-                            edge.source = graphDataObject.id;
-                            log.info("destination = " + resourceDest);
-                            log.info(graph.nodes[resourceDest]);
-                            edge.target = graph.nodes[resourceDest].id;
-                            edge.value = 1;
-                            edge.relation = associations[i].type;
+                            
+                            var relation = new Object();
+                             relation.source = graphDataObject.id;
+                            //log.info("destination = " + resourceDest);
+                            //log.info(graph.nodes[resourceDest]);
+                            relation.target = graph.nodes[resourceDest].id;
+                            relation.relation = associations[i].type;
+                            relation.id = graph.relationIndex;
 
-                            //graph.edges[]
-                            graph.edges.push(edge);
+                            graph.relations.push(relation);
+
+                            graphDataObject.relations.push(relation.id);
+
+                            var edge;
+
+                            if (graph.edges[graphDataObject.id + "," + graph.nodes[resourceDest].id]){
+                                log.info("edge exists " + graphDataObject.id + "," + graph.nodes[resourceDest].id);
+
+                                edge = graph.edges[graphDataObject.id + "," + graph.nodes[resourceDest].id];
+                                edge.relations.push(relation.id);
+
+                            }
+                            else{
+                                
+                                edge = new Object();
+                                edge.source = graphDataObject.id;
+                                //log.info("destination = " + resourceDest);
+                                //log.info(graph.nodes[resourceDest]);
+                                edge.target = graph.nodes[resourceDest].id;
+                                edge.relations = [];
+                                edge.relations.push(relation.id);
+                                edge.value = 1;
+
+                                graph.edges[graphDataObject.id + "," + graph.nodes[resourceDest].id] = edge;
+                                graph.edges[graph.nodes[resourceDest].id + "," + graphDataObject.id] = edge;
+
+                                //graph.edges[]
+                                graph.edges.push(edge);
+                            }
+
+                            graph.relationIndex++;
                         }
 
 

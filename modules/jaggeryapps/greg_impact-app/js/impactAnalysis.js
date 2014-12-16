@@ -67,22 +67,35 @@ var nodes = root.nodes,
     });*/
 
 link = link.data(links);
+linkNode = linkNode.data(links);
 
     link.exit().remove();
 
-    var linkEnter = link.enter().insert("line", ".node")
+    linkg = svg.selectAll(".linkg")
+        .data(links)
+        .enter().append("g")
+    .attr("class", "linkg");
+
+    /*var linkEnter = link.enter().insert("line", ".node")
         .on("mouseover", function (d) {
             //alert(d);
         })
         .attr("class", "link")
         .attr("marker-end", function (d) {
             return "url(#arrow)"
-        });
+        });*/
+link = linkg.append("line")
+    .attr("class", "link");
+//     .style("stroke-width", function (d) {
+//     return Math.sqrt(d.value);
+// });
 
-    var linkNode = linkEnter.append("circle")
-        .attr("cx", -3)
-        .attr("cy", 0)
-        .attr("r", 15);
+    linkNode = linkg.append("circle")
+        .attr("class", "linkNode")
+        //.attr("cx", 3) // do not add location at first
+        //.attr("cy", 3)
+        .on("click", alertLinkRelations)
+        .attr("r", 3);
 
     link.select("circle")
         .style("fill", "#272BBD");
@@ -99,8 +112,8 @@ link = link.data(links);
             return "node" + ('image' in d ? ' imagenode' : '') 
         })
         .on("dblclick", doubleclick)
-        .on("click", click);
-        //.call(force.drag); //enbles dragging nodes
+        .on("click", click)
+        .call(force.drag); //enbles dragging nodes
 
     var circle = nodeEnter.append("circle")
         .attr("cx", -3)
@@ -149,9 +162,15 @@ link = link.data(links);
         });
 
     nodeEnter.append("text")
-        .attr("dy", ".35em")
-        .attr("dx", "30")
+        .attr("dy", "-3")
+        .attr("dx", "15")
         .text(function(d) { return d.name; }) ;
+
+    nodeEnter.append("text")
+        .attr("class", "mediaType")
+        .attr("dy", "10")
+        .attr("dx", "15")
+        .text(function(d) { return d.mediaType; }) ;
 
 }
 
@@ -217,19 +236,19 @@ function doubleclick(d) {
     if(selectedNode == -1 || selectedNode != d.index){
 
         node.style("opacity", function (o) {
-            return neighboring(o, d) ? 1 : 0.1;
+            return neighboring(o, d) || neighboring(d, o) ? 1 : 0.1;
         });
 
         //make links visble only if they are connected to source
-        link.style("opacity", function (o) {
-            return (d.index==o.target.index) ? 1 : 0.1;
+        linkg.style("opacity", function (o) {
+            return (d.index==o.target.index) || (d.index==o.source.index) ? 1 : 0.1;
         });
         selectedNode = d.index;
     }
     else{
         //Put them back to opacity=1
         node.style("opacity", 1);
-        link.style("opacity", 1);
+        linkg.style("opacity", 1);
         selectedNode = -1;
     }
 
@@ -244,6 +263,14 @@ function doubleclick(d) {
 }
 
 function click(d) {
+    if (d.relations.length > 0){
+        var notify = [];
+        for (i = 0; i < d.relations.length; i++){
+            notify.push(root.relations[d.relations[i]])
+        }
+        //alert(JSON.stringify(notify));
+        console.log("node " + d.name + " = " + JSON.stringify(notify));
+    }
 
     //displayInfo(d);
     
@@ -299,7 +326,26 @@ link.attr("x1", function(d) { return d.source.x; })
     .attr("x2", function(d) { return d.target.x; })
     .attr("y2", function(d) { return d.target.y; });
 
+linkNode.attr("cx", function(d) { return midPoint(d.source.x,d.target.x) })
+        .attr("cy", function(d) { return midPoint(d.source.y,d.target.y) });
+
+linkg.attr("object", function(d) { 
+    return JSON.stringify(d) 
+});
+
 node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+}
+
+function midPoint(val1, val2) {
+    if (val1 < val2){
+        return val1 + ((val2 - val1) / 2);
+    }
+    else if (val1 > val2){
+        return val2 + ((val1 - val2) / 2);
+    }
+    else{
+        return val1;
+    }
 }
 
 function setupSearch() {
@@ -344,4 +390,17 @@ function searchNode() {
 
 
     }
+}
+
+function alertLinkRelations(d){
+    if (d.relations.length > 0){
+        var notify = [];
+        for (i = 0; i < d.relations.length; i++){
+            notify.push(root.relations[d.relations[i]])
+        }
+        //alert(JSON.stringify(notify));
+
+        console.log("link " + d.source.name + "," + d.target.name + " = " + JSON.stringify(notify));
+    }
+    //alert("source = " + d.source.path + ", destination = " + d.target.path);
 }

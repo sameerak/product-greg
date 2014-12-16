@@ -329,22 +329,25 @@ marker#arrow {
     color: #000;
     text-shadow: 0px 1px 1px #f0f1f0;
     fill: #000;
-    stroke     : #000;
-    stroke-width: 1;
+    /*stroke     : #000;
+    stroke-width: 1;*/
 }
 
-line.link {
+.link {
     fill: none;
-    stroke: #7302e1;
+    stroke: purple;
     stroke-width: 1.5px;
     border:5px solid #ccc;
 }
 
-.link circle {
-  position: relative;
-  right: 50%;
-  top: 50%;
-    cursor: pointer;
-    stroke: #ffffff;
-    stroke-width: 2px;
+.linkNode {
+    stroke: purple;
+    stroke-width: 1.5px;
+    fill: #fff;
+}
+
+text.mediaType {
+    font: 9px arial;
+    text-align: left;
+    fill     : #555;
 }
