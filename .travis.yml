@@ -1,6 +1,6 @@
 language: java
 install:
-  - mvn clean install  | egrep -v "(^\[INFO\])"
+  - mvn clean install -q
 jdk:
   - oraclejdk7
 branches:
