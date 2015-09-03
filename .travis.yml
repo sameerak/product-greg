@@ -1,6 +1,6 @@
 language: java
 install:
-  - travis_wait mvn clean install -q
+  - travis_wait 30 mvn clean install -q
 jdk:
   - oraclejdk7
 branches:
