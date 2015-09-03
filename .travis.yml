@@ -1,6 +1,6 @@
 language: java
 install:
-  - travis_wait 60 mvn clean install | egrep -v '(Downloading:|Downloaded:)'
+  - mvn clean install | egrep -v '(Downloading:|Downloaded:)'
 jdk:
   - oraclejdk7
 branches:
