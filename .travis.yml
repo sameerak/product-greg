@@ -2,6 +2,8 @@ sudo: false
 language: java
 install:
   - mvn clean install -Dmaven.test.skip=true | egrep -v '(Downloading:|Downloaded:)'
+script: 
+  - mvn test | egrep -v '(Downloading:|Downloaded:)'
 jdk:
   - oraclejdk7
 branches:
