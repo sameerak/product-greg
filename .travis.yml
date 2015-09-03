@@ -1,0 +1,7 @@
+language: java
+mvn clean install
+jdk:
+  - oraclejdk7
+ branches:
+  only:
+    - travisCIBuild
