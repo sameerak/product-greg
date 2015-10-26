@@ -719,6 +719,16 @@
 
     <repositories>
         <repository>
+            <id>wso2-gov-ext-staging</id>
+            <name>WSO2 staging Repository</name>
+            <url>http://maven.wso2.org/nexus/content/repositories/orgwso2carbongovernance-extensions-055/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+                <checksumPolicy>ignore</checksumPolicy>
+            </releases>
+        </repository>
+        <repository>
             <id>wso2-nexus</id>
             <name>WSO2 internal Repository</name>
             <url>http://maven.wso2.org/nexus/content/groups/wso2-public/</url>
@@ -991,19 +1001,19 @@
         <carbon.kernel.registry.imp.pkg.version>[1.0.1, 2.0.0)</carbon.kernel.registry.imp.pkg.version>
         
         <!-- Carbon Registry -->
-        <carbon.registry.version>4.4.10-SNAPSHOT</carbon.registry.version>
-        <carbon.registry.package.import.version.range>[4.4.0, 4.5.0)
+        <carbon.registry.version>4.5.0</carbon.registry.version>
+        <carbon.registry.package.import.version.range>[4.5.0, 5.0.0)
         </carbon.registry.package.import.version.range>
         
         <!-- Carbon Governance -->
-        <carbon.governance.version>4.5.10-SNAPSHOT</carbon.governance.version>
+        <carbon.governance.version>4.6.0</carbon.governance.version>
 
-        <carbon.governance.ext.version>4.4.9-SNAPSHOT</carbon.governance.ext.version>
+        <carbon.governance.ext.version>4.4.9</carbon.governance.ext.version>
 
         <carbon.business.process.version>4.4.3</carbon.business.process.version>
         
         <!-- Carbon Commons -->
-        <carbon.commons.version>4.4.7</carbon.commons.version>
+        <carbon.commons.version>4.4.8</carbon.commons.version>
         
         <!-- Carbon Identity -->
         <carbon.identity.version>4.5.6</carbon.identity.version>
