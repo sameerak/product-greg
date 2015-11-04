@@ -3,30 +3,30 @@ language: java
 install:
   - mvn clean install -Dmaven.test.skip=true | egrep -v '(Downloading:|Downloaded:)'
 script:
-cd /home/travis/build/sameerak/product-greg/modules/integration/tests-integration/tests-resources
-mvn install | egrep -v '(Downloading:|Downloaded:)'
-cd /home/travis/build/sameerak/product-greg/modules/integration/tests-integration/tests-metadata
-mvn install | egrep -v '(Downloading:|Downloaded:)'
-cd /home/travis/build/sameerak/product-greg/modules/integration/tests-integration/tests-lifecycle
-mvn install | egrep -v '(Downloading:|Downloaded:)'
-cd /home/travis/build/sameerak/product-greg/modules/integration/tests-integration/tests-permissions
-mvn install | egrep -v '(Downloading:|Downloaded:)'
-cd /home/travis/build/sameerak/product-greg/modules/integration/tests-integration/tests-extensibility
-mvn install | egrep -v '(Downloading:|Downloaded:)'
-cd /home/travis/build/sameerak/product-greg/modules/integration/tests-integration/tests-governance-api
-mvn install | egrep -v '(Downloading:|Downloaded:)'
-cd /home/travis/build/sameerak/product-greg/modules/integration/tests-integration/tests-smoke
-mvn install | egrep -v '(Downloading:|Downloaded:)'
-cd /home/travis/build/sameerak/product-greg/modules/integration/tests-integration/tests-jiras
-mvn install | egrep -v '(Downloading:|Downloaded:)'
-cd /home/travis/build/sameerak/product-greg/modules/integration/tests-integration/tests-search-version
-mvn install | egrep -v '(Downloading:|Downloaded:)'
-cd /home/travis/build/sameerak/product-greg/modules/integration/tests-integration/tests-soapservice
-mvn install | egrep -v '(Downloading:|Downloaded:)'
-cd /home/travis/build/sameerak/product-greg/modules/integration/tests-integration/cmis-tck
-mvn install | egrep -v '(Downloading:|Downloaded:)'
-cd /home/travis/build/sameerak/product-greg/modules/integration/tests-integration/reports
-mvn install | egrep -v '(Downloading:|Downloaded:)' 
+  - cd /home/travis/build/sameerak/product-greg/modules/integration/tests-integration/tests-resources
+  - mvn install | egrep -v '(Downloading:|Downloaded:)'
+  - cd /home/travis/build/sameerak/product-greg/modules/integration/tests-integration/tests-metadata
+  - mvn install | egrep -v '(Downloading:|Downloaded:)'
+  - cd /home/travis/build/sameerak/product-greg/modules/integration/tests-integration/tests-lifecycle
+  - mvn install | egrep -v '(Downloading:|Downloaded:)'
+  - cd /home/travis/build/sameerak/product-greg/modules/integration/tests-integration/tests-permissions
+  - mvn install | egrep -v '(Downloading:|Downloaded:)'
+  - cd /home/travis/build/sameerak/product-greg/modules/integration/tests-integration/tests-extensibility
+  - mvn install | egrep -v '(Downloading:|Downloaded:)'
+  - cd /home/travis/build/sameerak/product-greg/modules/integration/tests-integration/tests-governance-api
+  - mvn install | egrep -v '(Downloading:|Downloaded:)'
+  - cd /home/travis/build/sameerak/product-greg/modules/integration/tests-integration/tests-smoke
+  - mvn install | egrep -v '(Downloading:|Downloaded:)'
+  - cd /home/travis/build/sameerak/product-greg/modules/integration/tests-integration/tests-jiras
+  - mvn install | egrep -v '(Downloading:|Downloaded:)'
+  - cd /home/travis/build/sameerak/product-greg/modules/integration/tests-integration/tests-search-version
+  - mvn install | egrep -v '(Downloading:|Downloaded:)'
+  - cd /home/travis/build/sameerak/product-greg/modules/integration/tests-integration/tests-soapservice
+  - mvn install | egrep -v '(Downloading:|Downloaded:)'
+  - cd /home/travis/build/sameerak/product-greg/modules/integration/tests-integration/cmis-tck
+  - mvn install | egrep -v '(Downloading:|Downloaded:)'
+  - cd /home/travis/build/sameerak/product-greg/modules/integration/tests-integration/reports
+  - mvn install | egrep -v '(Downloading:|Downloaded:)' 
 jdk:
   - oraclejdk7
 branches:
