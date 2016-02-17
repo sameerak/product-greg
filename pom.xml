@@ -738,6 +738,16 @@
 
 
     <repositories>
+       <repository>
+            <id>wso2.444</id>
+            <name>Apache Snapshot Repository</name>
+            <url>http://maven.wso2.org/nexus/content/repositories/orgwso2carbon-328/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+                <checksumPolicy>ignore</checksumPolicy>
+            </releases>
+        </repository>
         <repository>
             <id>wso2-nexus</id>
             <name>WSO2 internal Repository</name>
@@ -775,6 +785,16 @@
         <repository><id>m2-snapshot-repository</id><url>http://people.apache.org/repo/m2-snapshot-repository</url><releases><enabled>false</enabled></releases><snapshots><enabled>true</enabled></snapshots></repository><repository><id>wso2-maven2-repository</id><url>http://dist.wso2.org/maven2</url></repository><repository><id>tomcat-repository</id><url>http://tomcat.apache.org/dev/dist/m2-repository</url></repository><repository><id>ws-zones-repository</id><url>http://ws.zones.apache.org/repository2</url></repository><repository><id>wso2-maven2-snapshot-repository</id><name>WSO2 Maven2 SNAPSHOTS</name><url>http://dist.wso2.org/snapshots/maven2</url><snapshots><enabled>true</enabled><updatePolicy>always</updatePolicy><checksumPolicy>ignore</checksumPolicy></snapshots><releases><enabled>false</enabled></releases></repository><!&ndash;&ndash; Others are available from http://repo1.maven.org/maven2 &ndash;&ndash;>-->
     </repositories>
     <pluginRepositories>
+        <pluginRepository>
+            <id>wso2.444</id>
+            <name>WSO2 444 Repository</name>
+            <url>http://maven.wso2.org/nexus/content/repositories/orgwso2carbon-328/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+                <checksumPolicy>ignore</checksumPolicy>
+            </releases>
+        </pluginRepository>
         <pluginRepository>
             <id>wso2-maven2-repository</id>
             <url>http://dist.wso2.org/maven2</url>
@@ -974,10 +994,10 @@
         <!--Apache Axis2-->
         <axis2.wso2.version>1.6.1.wso2v11</axis2.wso2.version>
         <!--Apache Axiom-->
-        <axiom.wso2.version>1.2.11.wso2v5</axiom.wso2.version>
+        <axiom.wso2.version>1.2.11.wso2v10</axiom.wso2.version>
         <!--SCM-->
         <orbit.version.maven-scm>1.7.0.wso2v1</orbit.version.maven-scm>
-        <version.axiom>1.2.11-wso2v5</version.axiom>
+        <version.axiom>1.2.11-wso2v10</version.axiom>
         <orbit.version.commons.beanutils>1.8.0.wso2v1</orbit.version.commons.beanutils>
         <orbit.version.commons.collection>3.2.0.wso2v1</orbit.version.commons.collection>
         <orbit.version.commons.dbcp>1.4.0.wso2v1</orbit.version.commons.dbcp>
@@ -1004,7 +1024,7 @@
 
         <!-- Carbon Kernel -->
 
-        <carbon.kernel.version>4.4.1</carbon.kernel.version>
+        <carbon.kernel.version>4.4.4</carbon.kernel.version>
         <carbon.kernel.package.import.version.range>[4.4.0, 4.5.0)
         </carbon.kernel.package.import.version.range>
 
